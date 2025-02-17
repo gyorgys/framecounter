@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Frame Counter</title>
+    <style>
+        body {
+            background-color: black;
+            font-family: Arial, sans-serif;
+            text-align: center;
+            color: gray;
+        }
+
+        #frame-number {
+            color: white;
+            font-size: 200px;
+            margin-top: 20vh;
+        }
+        #ms-number {
+            color: yellow;
+            font-size: 100px;
+            margin-top: 8vh;
+        }
+    </style>
+</head>
+<body>
+    <div id="frame-number">0</div>
+    <div><span id="ms-number">0</span> ms</div>
+</body>
+</html>
+<script>
+    let frameNumber = 0;
+    let startTime = new Date().getTime();
+
+    function paint() {
+        frameNumber++;
+        document.getElementById("frame-number").innerHTML = frameNumber;
+        let currentTime = new Date().getTime();
+        let msDiff = currentTime-startTime;
+        document.getElementById("ms-number").innerHTML = msDiff;
+        if (msDiff > 100000) {
+            startTime = currentTime;
+        }
+        requestAnimationFrame(paint);
+    }
+    requestAnimationFrame(paint);
+</script>
