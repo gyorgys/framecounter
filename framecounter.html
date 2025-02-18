@@ -9,36 +9,56 @@
             text-align: center;
             color: gray;
         }
-
+        #refresh {
+            color: grey;
+            font-size: 4vw;
+            margin-top: 10vh;
+        }
         #frame-number {
             color: white;
-            font-size: 200px;
-            margin-top: 20vh;
-        }
-        #ms-number {
-            color: yellow;
-            font-size: 100px;
+            font-size: 20vw;
             margin-top: 8vh;
+        }
+        #time {
+            color: yellow;
+            font-size: 10vw;
+            margin-top: 4vh;
         }
     </style>
 </head>
 <body>
+    <div id="refresh"><span id="refresh-hz">0</span> Hz</div>
     <div id="frame-number">0</div>
-    <div><span id="ms-number">0</span> ms</div>
+    <div id="time"><span id="ms-number">0</span> ms</div>
 </body>
 </html>
 <script>
+    const FPS_FRAME_COUNT = 30;
     let frameNumber = 0;
     let startTime = new Date().getTime();
+    let frameTimes = [];
 
     function paint() {
         frameNumber++;
         document.getElementById("frame-number").innerHTML = frameNumber;
         let currentTime = new Date().getTime();
-        let msDiff = currentTime-startTime;
+        let msDiff = currentTime - startTime;
         document.getElementById("ms-number").innerHTML = msDiff;
+
+        frameTimes.push(currentTime);
+        if (frameTimes.length > FPS_FRAME_COUNT) {
+            frameTimes.shift();
+        }
+
+        if (frameTimes.length > 1) {
+            let timeDiff = frameTimes[frameTimes.length - 1] - frameTimes[0];
+            let refreshRate = ((frameTimes.length - 1) * 1000 / timeDiff).toFixed(0);
+            document.getElementById("refresh-hz").innerHTML = refreshRate;
+        }
+
         if (msDiff > 100000) {
             startTime = currentTime;
+            frameTimes = [];
         }
         requestAnimationFrame(paint);
     }
