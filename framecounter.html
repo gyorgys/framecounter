@@ -12,23 +12,45 @@
         #refresh {
             color: grey;
             font-size: 4vw;
-            margin-top: 10vh;
+            margin-top: 2vh;
         }
         #frame-number {
             color: white;
             font-size: 20vw;
-            margin-top: 8vh;
+            margin-top: 4vh;
         }
         #time {
             color: yellow;
             font-size: 10vw;
             margin-top: 4vh;
         }
+        table {
+            width: auto;
+            margin: 2vh auto 0 auto;
+        }
+        td {
+            width: 6vh;
+            height: 6vh;
+            background-color: black;
+            color: white;
+            font-size: 2vw;
+        }
+        .active {
+            background-color: orange;
+        }
     </style>
 </head>
 <body>
     <div id="refresh"><span id="refresh-hz">0</span> Hz</div>
     <div id="frame-number">0</div>
+    <table>
+        <tr id="tens-row">
+            <td>0</td><td>1</td><td>2</td><td>3</td><td>4</td><td>5</td><td>6</td><td>7</td><td>8</td><td>9</td>
+        </tr>
+        <tr id="ones-row">
+            <td>0</td><td>1</td><td>2</td><td>3</td><td>4</td><td>5</td><td>6</td><td>7</td><td>8</td><td>9</td>
+        </tr>
+    </table>
     <div id="time"><span id="ms-number">0</span> ms</div>
 </body>
 </html>
@@ -60,7 +82,27 @@
             startTime = currentTime;
             frameTimes = [];
         }
+
+        updateTable(frameNumber);
+
         requestAnimationFrame(paint);
     }
+
+    function updateTable(frameNumber) {
+        let tens = Math.floor((frameNumber % 100) / 10);
+        let ones = frameNumber % 10;
+
+        let tensRow = document.getElementById("tens-row").children;
+        let onesRow = document.getElementById("ones-row").children;
+
+        for (let i = 0; i < 10; i++) {
+            tensRow[i].classList.remove("active");
+            onesRow[i].classList.remove("active");
+        }
+
+        tensRow[tens].classList.add("active");
+        onesRow[ones].classList.add("active");
+    }
+
     requestAnimationFrame(paint);
 </script>
